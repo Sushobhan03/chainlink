@@ -127,10 +127,14 @@ func (r *RelayerFactory) NewSolana(ks keystore.Solana, chainCfgs solana.TOMLConf
 			if err != nil {
 				return nil, fmt.Errorf("failed to marshal Solana configs: %w", err)
 			}
-
+			envVars, err := plugins.ParseEnvFile(env.SolanaPluginEnv.Get())
+			if err != nil {
+				return nil, fmt.Errorf("failed to parse Solana env file: %w", err)
+			}
 			solCmdFn, err := plugins.NewCmdFactory(r.Register, plugins.CmdConfig{
 				ID:  relayID.Name(),
 				Cmd: cmdName,
+				Env: envVars,
 			})
 			if err != nil {
 				return nil, fmt.Errorf("failed to create Solana LOOP command: %w", err)
@@ -197,9 +201,14 @@ func (r *RelayerFactory) NewStarkNet(ks keystore.StarkNet, chainCfgs config.TOML
 				return nil, fmt.Errorf("failed to marshal StarkNet configs: %w", err)
 			}
 
+			envVars, err := plugins.ParseEnvFile(env.StarknetPluginEnv.Get())
+			if err != nil {
+				return nil, fmt.Errorf("failed to parse Starknet env file: %w", err)
+			}
 			starknetCmdFn, err := plugins.NewCmdFactory(r.Register, plugins.CmdConfig{
 				ID:  relayID.Name(),
 				Cmd: cmdName,
+				Env: envVars,
 			})
 			if err != nil {
 				return nil, fmt.Errorf("failed to create StarkNet LOOP command: %w", err)

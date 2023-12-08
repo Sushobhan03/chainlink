@@ -25,6 +25,7 @@ import (
 	ocr2keepers20runner "github.com/smartcontractkit/chainlink-automation/pkg/v2/runner"
 	ocr2keepers21config "github.com/smartcontractkit/chainlink-automation/pkg/v3/config"
 	ocr2keepers21 "github.com/smartcontractkit/chainlink-automation/pkg/v3/plugin"
+	"github.com/smartcontractkit/chainlink/v2/core/config/env"
 
 	"github.com/smartcontractkit/chainlink-vrf/altbn_128"
 	dkgpkg "github.com/smartcontractkit/chainlink-vrf/dkg"
@@ -588,8 +589,26 @@ func (d *Delegate) newServicesGenericPlugin(
 		OffchainConfigDigester:       provider.OffchainConfigDigester(),
 	}
 
+	var envVars []string
+	switch p.PluginName {
+	case "median":
+		envVars, err = plugins.ParseEnvFile(env.MedianPluginEnv.Get())
+		if err != nil {
+			return nil, fmt.Errorf("failed to parse median env file: %w", err)
+		}
+	}
+	if len(p.EnvVars) > 0 {
+		for k, v := range p.EnvVars {
+			envVars = append(envVars, k+"="+v)
+		}
+	}
+
 	pluginLggr := lggr.Named(p.PluginName).Named(spec.ContractID).Named(spec.GetID())
-	cmdFn, grpcOpts, err := d.cfg.RegisterLOOP(fmt.Sprintf("%s-%s-%s", p.PluginName, spec.ContractID, spec.GetID()), command)
+	cmdFn, grpcOpts, err := d.cfg.RegisterLOOP(plugins.CmdConfig{
+		ID:  fmt.Sprintf("%s-%s-%s", p.PluginName, spec.ContractID, spec.GetID()),
+		Cmd: command,
+		Env: envVars,
+	})
 	if err != nil {
 		return nil, fmt.Errorf("failed to register loop: %w", err)
 	}

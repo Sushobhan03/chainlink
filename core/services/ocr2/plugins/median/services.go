@@ -162,7 +162,17 @@ func NewMedianServices(ctx context.Context,
 	if medianLoopEnabled {
 		// use unique logger names so we can use it to register a loop
 		medianLggr := lggr.Named("Median").Named(spec.ContractID).Named(spec.GetID())
-		cmdFn, telem, err2 := cfg.RegisterLOOP(medianLggr.Name(), medianPluginCmd)
+		envVars, err2 := plugins.ParseEnvFile(env.MedianPluginEnv.Get())
+		if err2 != nil {
+			err = fmt.Errorf("failed to parse median env file: %w", err2)
+			abort()
+			return
+		}
+		cmdFn, telem, err2 := cfg.RegisterLOOP(plugins.CmdConfig{
+			ID:  medianLggr.Name(),
+			Cmd: medianPluginCmd,
+			Env: envVars,
+		})
 		if err2 != nil {
 			err = fmt.Errorf("failed to register loop: %w", err2)
 			abort()
