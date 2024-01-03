@@ -20,31 +20,34 @@ import (
 
 type ChainReaderConfig struct {
 	// ChainContractReaders key is contract name
-	ChainContractReaders map[string]ChainContractReader `json:"chainContractReaders"`
+	ChainContractReaders map[string]ChainContractReader `json:"chainContractReaders" toml:"chainContractReaders"`
 }
 
 type CodecConfig struct {
 	// ChainCodecConfigs is the type's name for the codec
-	ChainCodecConfigs map[string]ChainCodedConfig `json:"chainCodecConfig"`
+	ChainCodecConfigs map[string]ChainCodecConfig `json:"chainCodecConfigs" toml:"chainCodecConfigs"`
 }
 
-type ChainCodedConfig struct {
-	TypeAbi         string `json:"typeAbi"`
-	ModifierConfigs codec.ModifiersConfig
+type ChainCodecConfig struct {
+	TypeABI         string                `json:"typeAbi" toml:"typeABI"`
+	ModifierConfigs codec.ModifiersConfig `toml:"modifierConfigs,omitempty"`
 }
 
 type ChainContractReader struct {
-	ContractABI string `json:"contractABI"`
+	ContractABI string `json:"contractABI" toml:"contractABI"`
 	// key is genericName from config
-	ChainReaderDefinitions map[string]ChainReaderDefinition `json:"chainReaderDefinitions"`
+	ChainReaderDefinitions map[string]ChainReaderDefinition `json:"chainReaderDefinitions" toml:"chainReaderDefinitions"`
 }
 
 type ChainReaderDefinition struct {
-	ChainSpecificName   string `json:"chainSpecificName"` // chain specific contract method name or event type.
-	CacheEnabled        bool   `json:"cacheEnabled"`
-	ReadType            `json:"readType"`
-	InputModifications  codec.ModifiersConfig `json:"input_modifications"`
-	OutputModifications codec.ModifiersConfig `json:"output_modifications"`
+	//TODO test this!
+	CacheEnabled bool `json:"cacheEnabled" toml:"cacheEnabled,omitempty"`
+	// chain specific contract method name or event type.
+	ChainSpecificName string `json:"chainSpecificName" toml:"chainSpecificName"`
+	//TODO 0/1 is bad UX
+	ReadType            `json:"readType" toml:"readType,omitempty"`
+	InputModifications  codec.ModifiersConfig `json:"input_modifications" toml:"inputModifications,omitempty"`
+	OutputModifications codec.ModifiersConfig `json:"output_modifications" toml:"outputModifications,omitempty"`
 }
 
 type ReadType int64
@@ -54,6 +57,7 @@ const (
 	Event  ReadType = 1
 )
 
+// TODO toml?
 type RelayConfig struct {
 	ChainID                *big.Big           `json:"chainID"`
 	FromBlock              uint64             `json:"fromBlock"`

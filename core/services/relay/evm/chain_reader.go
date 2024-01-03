@@ -164,7 +164,7 @@ func (cr *chainReader) addMethod(
 func (cr *chainReader) addEvent(contractName, eventName string, a abi.ABI, chainReaderDefinition types.ChainReaderDefinition) error {
 	event, eventExists := a.Events[chainReaderDefinition.ChainSpecificName]
 	if !eventExists {
-		return fmt.Errorf("%w: method %s doesn't exist", commontypes.ErrInvalidConfig, chainReaderDefinition.ChainSpecificName)
+		return fmt.Errorf("%w: event %s doesn't exist", commontypes.ErrInvalidConfig, chainReaderDefinition.ChainSpecificName)
 	}
 	cr.contractBindings.AddReadBinding(contractName, eventName, &eventBinding{
 		lp:   cr.lp,
