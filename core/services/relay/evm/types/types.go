@@ -31,7 +31,7 @@ type CodecConfig struct {
 
 type ChainCodecConfig struct {
 	TypeABI         string                `json:"typeAbi" toml:"typeABI"`
-	ModifierConfigs codec.ModifiersConfig `toml:"modifierConfigs,omitempty"`
+	ModifierConfigs codec.ModifiersConfig `toml:"modifierConfigs,omitempty"` //TODO test this?
 }
 
 type ChainContractReader struct {
