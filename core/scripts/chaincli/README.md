@@ -144,10 +144,10 @@ Ensure the following fields are provided in your `.env` file:
 
 If your targeted upkeep involves streams lookup, include the following information:
 
-- `MERCURY_ID`
-- `MERCURY_KEY`
-- `MERCURY_LEGACY_URL`
-- `MERCURY_URL`
+- `DATA_STREAMS_ID`
+- `DATA_STREAMS_KEY`
+- `DATA_STREAMS_LEGACY_URL`
+- `DATA_STREAMS_URL`
 
 #### Tenderly Integration
 
