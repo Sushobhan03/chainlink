@@ -29,6 +29,8 @@ fj293fbBnlQ!f9vNs
 -- config.toml.tmpl --
 [Webserver]
 HTTPPort = $PORT
+[WebServer.TLS]
+HTTPSPort = 0
 
 [[Cosmos]]
 ChainID = 'Foo'
@@ -69,6 +71,7 @@ URL = 'http://stark.node'
 !EVM.1.HeadTracker.HeadListener
 	Listener is not connected
 -EVM.1.LogBroadcaster
+-EVM.1.Relayer
 -EVM.1.Txm
 -EVM.1.Txm.BlockHistoryEstimator
 -EVM.1.Txm.Broadcaster
@@ -81,8 +84,10 @@ URL = 'http://stark.node'
 -PipelineORM
 -PipelineRunner
 -PromReporter
--Solana.Bar
--StarkNet.Baz
+-Solana.Bar.Chain
+-Solana.Bar.Relayer
+-Solana.Bar.Txm
+-StarkNet.Baz.Relayer
 -TelemetryManager
 
 -- out.json --
@@ -156,6 +161,15 @@ URL = 'http://stark.node'
       "id": "EVM.1.LogBroadcaster",
       "attributes": {
         "name": "EVM.1.LogBroadcaster",
+        "status": "passing",
+        "output": ""
+      }
+    },
+    {
+      "type": "checks",
+      "id": "EVM.1.Relayer",
+      "attributes": {
+        "name": "EVM.1.Relayer",
         "status": "passing",
         "output": ""
       }
@@ -270,18 +284,36 @@ URL = 'http://stark.node'
     },
     {
       "type": "checks",
-      "id": "Solana.Bar",
+      "id": "Solana.Bar.Chain",
       "attributes": {
-        "name": "Solana.Bar",
+        "name": "Solana.Bar.Chain",
         "status": "passing",
         "output": ""
       }
     },
     {
       "type": "checks",
-      "id": "StarkNet.Baz",
+      "id": "Solana.Bar.Relayer",
       "attributes": {
-        "name": "StarkNet.Baz",
+        "name": "Solana.Bar.Relayer",
+        "status": "passing",
+        "output": ""
+      }
+    },
+    {
+      "type": "checks",
+      "id": "Solana.Bar.Txm",
+      "attributes": {
+        "name": "Solana.Bar.Txm",
+        "status": "passing",
+        "output": ""
+      }
+    },
+    {
+      "type": "checks",
+      "id": "StarkNet.Baz.Relayer",
+      "attributes": {
+        "name": "StarkNet.Baz.Relayer",
         "status": "passing",
         "output": ""
       }
